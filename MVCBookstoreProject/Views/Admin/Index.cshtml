@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Admin/Index" style="">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Book Store</li>
+    </ol>
+    <div class="row">
+        
+        <div class=" col-md-3">
+            <a href="@Url.Action("Index", "Customers")" style="text-decoration: none;">
+                <div class="container bg-info" style="font-size: 12px; height: 60px;">
+                    <p class="d-block text-white" style="padding-top: 20px; padding-bottom: 20px; text-decoration: none;" > <strong>@ViewBag.customerNums</strong> customers registered.</p>
+                </div>
+            </a>
+            
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Books")" style="text-decoration: none;">
+                <div class="container bg-warning" style="font-size: 12px; height: 60px;">
+                    <p class="d-block text-white" style="padding-top: 20px; padding-bottom: 20px;"> <strong>@ViewBag.bookNums</strong> books available.</p>
+                </div>
+            </a>
+            
+        </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "Orders")" style="text-decoration: none;">
+                <div class="container bg-success" style="font-size: 12px; height: 60px;">
+                    <strong class="text-white">@DateTime.Today.ToLongDateString()</strong>
+                    <p class="d-block text-white"> <strong>@ViewBag.orders</strong> orders made</p>
+                </div>
+            </a>
+
+        </div>
+        <div class=" col-md-3 text-white">
+            <a href="@Url.Action("ProcessingOrders", "Orders")" style="text-decoration: none;">
+                <div class="container bg-danger" style="font-size: 12px; height: 60px;">
+                    <strong class="text-white" style="margin-top: 5px;">@DateTime.Today.ToLongDateString()</strong>
+                    <p class="d-block text-white"> <strong>@ViewBag.toBeHandledOrderNum</strong> orders to be confirmed</p>
+                </div>
+            </a>
+            
+        </div>
+        
+        
+
+    </div>
+</div>
+

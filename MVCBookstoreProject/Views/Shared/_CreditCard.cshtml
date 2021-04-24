@@ -1,0 +1,36 @@
+﻿@model MVCBookstoreProject.Models.Customer
+<div class="panel-body" id="creditcard" style="display: none;">
+    @Html.HiddenFor(model=>model.CustomerId)
+
+    <dl class="dl-horizontal">
+        <dt style="text-align: left;">
+            @Html.LabelFor(model=>model.CreditCard.CardIssuer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreditCard.CardIssuer)
+        </dd>
+        <br/>
+        <dt style="text-align: left;">
+            @Html.LabelFor(model => model.CreditCard.CardNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreditCard.CardNo)
+        </dd>
+        <br />
+        <dt style="text-align: left;">
+            @Html.LabelFor(model=>model.CreditCard.ExpireDate)
+        </dt>
+        <dd>
+            @Model.CreditCard.ExpireDate.ToLongDateString()
+        </dd>
+        <hr />
+        <dt style="text-align: left;">
+            @Html.LabelFor(model => model.CreditCard.HolderName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreditCard.HolderName)
+        </dd>
+    </dl>
+
+</div>
+

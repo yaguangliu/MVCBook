@@ -1,0 +1,98 @@
+﻿@using MVCBookstoreProject.Models
+@model MVCBookstoreProject.Models.Order
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Admin/Index">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item ">Orders</li>
+        <li class="breadcrumb-item active">Update Status</li>
+    </ol>
+    <div class="card-body border border-light shadow">
+        @using (Html.BeginForm("Edit", "Orders", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal ml-2">
+            @*<h4>Book</h4>*@
+            @*<hr />*@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.OrderId)
+            <div class="row">
+                <div class="form-group col-md-6 ">
+                    @Html.LabelFor(model => model.OrderDate, "Order Date", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @*@Model.OrderDate.ToShortDateString()*@
+                        @*@Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+
+                @*<div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PaymentMethod, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EnumDropDownListFor(model => model.PaymentMethod, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.CustomerId, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.CustomerId,  new {htmlAttributes= new{ @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 ">
+                    @Html.Label("Item Numbers", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @*@Html.EditorFor(@ViewBag.Quantity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                        @*@Model.OrderDate.ToShortDateString()*@
+                        @*@Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })*@
+                        @ViewBag.Quantity
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6 ">
+                    @Html.Label("Total Cost", new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @*@Html.EditorFor(@ViewBag.Quantity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                        @*@Model.OrderDate.ToShortDateString()*@
+                        @*@Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })*@
+                        $@ViewBag.Total
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.OrderStatus, "PublisherId", htmlAttributes: new { @class = "control-label col-md-12" })
+                    <div class="col-md-12">
+                        @Html.EnumDropDownListFor(model => model.OrderStatus, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.OrderStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="col-md-offset-10 col-md-2" style="margin-top: 30px;">
+                        <input type="submit" value="UPDATE STATUS" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        }
+    </div>
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+

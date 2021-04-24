@@ -1,0 +1,123 @@
+﻿@using MVCBookstoreProject.Helpers
+@using MVCBookstoreProject.ViewModels
+@{
+    decimal subTotal = 0;
+    var totalItems = 0;
+    decimal tax = 0;
+    decimal total = 0;
+    if (Session["cart"] != null)
+    {
+        foreach (var item in (List<CartViewModel>)Session["cart"])
+        {
+            totalItems += item.Quantity;
+
+            subTotal += Convert.ToDecimal(item.Quantity * item.Book.Price);
+            subTotal = Convert.ToDecimal(subTotal.ToString("N2"));
+
+        }
+        tax = subTotal * Convert.ToDecimal(0.05);
+        tax = Convert.ToDecimal(tax.ToString("N2"));
+        total = subTotal + tax;
+    }
+
+}
+<div class="panel panel-default">
+    <div class="panel-heading"><h4><strong>ORDER SUMMARY</strong></h4></div>
+    <div class="panel-body">
+        @*<table class="table">
+
+                <tr>
+                    <th>SUBTOTAL</th>
+                    <td>@subTotal</td>
+                </tr>
+                <tr>
+                    <th><small class="text-muted">Shipping</small></th>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <th><small class="text-muted">GST</small></th>
+                    <td>@tax</td>
+                </tr>
+                <tr>
+                    <th>TOTAL</th>
+                    <td>@total</td>
+                </tr>
+
+            </table>*@
+        <dl class="dl-horizontal">
+            <dt style="text-align: left;">SUBTOTAL</dt>
+            <dd>$ @subTotal</dd>
+            <br />
+            <dt style="text-align: left;"><small class="text-muted">Shipping</small></dt>
+            <dd>FREE</dd>
+            <br />
+            <dt style="text-align: left;"><small class="text-muted">GST</small></dt>
+            <dd>$ @tax</dd>
+            <hr />
+            <dt style="text-align: left;">TOTAL</dt>
+            <dd>$ @total</dd>
+        </dl>
+    </div>
+</div>
+
+@*<div class="panel panel-default" style="margin-top: 10px;">*@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a role="button" class="btn-block collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="False" aria-controls="collapseOne" style="text-decoration: none;">
+                    @totalItems ITEM(S) IN ORDER
+                    <div class="pull-right"><i class="fa fa-plus"></i></div>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <div class="row product-container">
+                    @if (Session["cart"] != null)
+                    {
+                        foreach (var book in (List<CartViewModel>)Session["cart"])
+                        {
+                            <div class="col-md-10 col-md-offset-1 align-middle" style="margin-bottom: 8px; border: 1px solid #eee;">
+
+                                <div class="thumbnail product-item col-md-3" style="height: 80px;margin-top: 5px;">
+
+                                    @if (book.Book.Photo != null)
+                                    {
+                                        @Html.GetThumbnail(book.Book.Photo, 160, 160)
+                                    }
+
+                                </div>
+                                <div class="caption col-md-9">
+                                    <h5><strong>@book.Book.BookName</strong></h5>
+                                    <p class="d-block">
+                                        Get it by @DateTime.Today.AddDays(3).ToLongDateString()
+                                    </p>
+                                    <p>
+                                        <div class="pull-left">
+                                            QTY: @book.Quantity
+                                        </div>
+                                        <div class="pull-right">
+                                            <strong>$@book.Book.Price</strong>
+                                        </div>
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        }
+                    }
+
+
+                </div>
+            </div>
+            @*<button value="Edit" class="btn btn-danger btn-block">Edit</button>*@
+        </div>
+
+    </div>
+
+
+</div>
+

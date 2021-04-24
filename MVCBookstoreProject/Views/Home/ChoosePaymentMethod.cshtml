@@ -1,0 +1,149 @@
+﻿@using Microsoft.AspNet.Identity
+@using MVCBookstoreProject.Helpers
+@using MVCBookstoreProject.ViewModels
+@*@using MVCBookstoreProject.ViewModels*@
+@*@model MVCBookstoreProject.ViewModels.PaymentViewModel*@
+@model MVCBookstoreProject.Models.Customer
+@{
+    ViewBag.Title = "ChoosePaymentMethod";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    
+
+    <div class="col-md-8">
+        <!--Credit card-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                @Html.RadioButton("isCash", "true", new { onclick = "showNote(this.value);", @checked = "checked", name = "paymentChoice" }) Cash On Delivery
+
+
+                @*@Html.RadioButtonFor(model => model.isCash, "false", new { onclick = "showNote(this.value);", style = "margin-left:20px;", name = "paymentChoice" })Credit Card*@
+                @Html.RadioButton("isCash", "false", new { onclick = "showNote(this.value);", style = "margin-left:20px;", name = "paymentChoice" }) Credit Card
+
+            </div>
+            @if (Model.CreditCardId != null)
+            {
+                @Html.Partial("_CreditCard")
+            }
+            else
+            {
+                @Html.Partial("_PaymentMethod", new PaymentViewModel() { CustomerId = Model.CustomerId })
+            }
+
+        </div>
+        
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row product-container">
+                    @if (Session["cart"] != null)
+                    {
+                        foreach (var book in (List<CartViewModel>)Session["cart"])
+                        {
+
+
+                            <div class="col-md-3 col-sm-3 col-xs-6" style="margin-bottom: 8px">
+
+                                <div class="thumbnail product-item" style="height: 180px">
+
+                                    @if (book.Book.Photo != null)
+                                    {
+                                        @Html.GetThumbnail(book.Book.Photo, 160, 160)
+                                    }
+
+                                    <div class="caption text-center">
+                                        <p class="text-center">QTY: @book.Quantity</p>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    }
+
+                </div>
+
+                <hr />
+                <h4>SHIPPING ADDRESS</h4>
+                <div class="panel-body" style="background-color: #eee;">
+
+
+                    <div>
+                        <p style="margin-top: 10px;">
+                            <strong>@Model.FirstName @Model.LastName</strong>
+                            <br />
+                            <br />
+                            @Model.Address.Number @Model.Address.Street1 @Model.Address.Street2
+                            <br />
+                            <br />
+                            @Model.Address.City, @Model.Address.State, @Model.Address.PostCode
+                        </p>
+                        @*@{
+                                var user = (System.Security.Claims.ClaimsIdentity) User.Identity;
+
+                            }
+                            @if (Session["checkOut"] != null)
+                            {
+                                foreach (var item in (List<CheckOutViewModel>) Session["checkOut"])
+                                {
+                                    <p style="margin-top: 10px;">
+                                        <strong>@user.FindFirstValue("FirstName") @user.FindFirstValue("LastName")</strong>
+                                        <br/>
+                                        <br/>
+                                        @item.Address.Number @item.Address.Street1
+                                        <br/>
+                                        <br/>
+                                        @item.Address.City, @item.Address.State, @item.Address.PostCode
+                                    </p>
+
+
+                                }
+                            }*@
+                    </div>
+                </div>
+
+                <hr />
+                <h4>SHIPPING METHOD</h4>
+                <div class="panel-body" style="background-color: #eee;">
+                    <h4>STANDARD <span class="d-inline-block pull-right">FREE</span></h4>
+                    <p>Get it by @DateTime.Today.AddDays(3).ToLongDateString()</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        @Html.Partial("_OrderSummary")
+
+        @*<button class="btn btn-success">Place Order</button>*@
+        @Html.ActionLink("PLACE ORDER", "PlaceOrder", "Home", new{customerId = Model.CustomerId}, new { @class = "btn btn-primary" })
+        @*<a href="@Url.Action("PlaceOrder", "Home")" class="btn btn-info">Place Order</a>*@
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    function showNote(isCash) {
+        var card = document.getElementById("creditcard");
+        var cash = document.getElementById("cash");
+        if (isCash == "true") {
+            card.style.display = "none";
+            cash.style.display = "block";
+
+        } else {
+            card.style.display = "block";
+            cash.style.display = "none";
+
+        }
+    }
+</script>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

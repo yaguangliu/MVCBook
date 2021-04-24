@@ -1,0 +1,153 @@
+﻿@*@model MVCBookstoreProject.Models.Order*@
+@using MVCBookstoreProject.Helpers
+@model IEnumerable<MVCBookstoreProject.Models.OrderDetail>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="~/Admin/Index" style="">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Orders</li>
+
+    </ol>
+    <div class="card mb-3">
+        <div class="card-header ">
+            <div class="row">
+               
+                <div class="pull-right">
+                    <a href="@Url.Action("Details","Customers",new{id=@ViewBag.id})" class="btn btn-outline-primary"> >> CUSTOMER</a>
+                    @Html.ActionLink(">> ORDERS", "Index", "Orders", htmlAttributes: new {@class = "btn btn-outline-secondary"})
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm" id="dataTable" width="100%" cellspacing="0" style="font-size: 14px;">
+                    <thead>
+                    <tr>
+                        <th class="sorting_asc_disabled sorting_desc_disabled">
+                            @Html.DisplayNameFor(model => model.Book.Photo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.BookName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.Author)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.Publisher)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.Category)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.Language)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Book.Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quantity)
+                        </th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr id="row_@item.OrderId">
+                            <td class="align-middle">
+                                @Html.GetThumbnail(@item.Book.Photo, 80, 80)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Book.BookName)
+
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Book.Author)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Book.Publisher.PublisherName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Book.Category.CategoryName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Book.Language.LanguageName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Book.Price)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(model => item.Quantity)
+                            </td>
+
+                        </tr>
+
+                    }
+
+                    </tbody>
+                </table>
+                
+                <input type="hidden" id="hiddenBookId" />
+
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this book?<br /><span class="text-danger">This cannot be undone.</span>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-secondary" href="#" data-dismiss="modal">Cancel</a>
+                                @*@using (Html.BeginForm("Delete", "Books", FormMethod.Post, new {id = "myform", @class = "", enctype="multipart/form-data"}))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="submit" value="Delete" id="deleteBtn" class="btn btn-danger"/>
+                                    }*@
+
+                                <a href="#" class="btn btn-success" onclick="DeleteBook()">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var ConfirmDelete = function(BookId) {
+        $("#hiddenBookId").val(BookId);
+        $("#deleteModal").modal('show');
+    }
+
+    var DeleteBook = function() {
+        var bookId = $("#hiddenBookId").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete","Books")',
+            data: { id: bookId },
+            success: function() {
+                $("#deleteModal").modal("hide");
+                $("#row_" + bookId).remove();
+
+            }
+        })
+    }
+</script>

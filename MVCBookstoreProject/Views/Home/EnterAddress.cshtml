@@ -1,0 +1,235 @@
+﻿@using Microsoft.AspNet.Identity
+@using MVCBookstoreProject.Helpers
+@using MVCBookstoreProject.ViewModels
+@model MVCBookstoreProject.ViewModels.CheckOutAddressModel
+@{
+    ViewBag.Title = "CheckOutDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @{var user = (System.Security.Claims.ClaimsIdentity)User.Identity;}
+    @using (Html.BeginForm("EnterAddress", "Home"))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4><strong>CUSTOMER INFORMATION</strong></h4></div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Customer.FirstName)
+                            <div>
+                                @*@user.FindFirstValue("FirstName")*@
+                                <input type="text" name="FirstName" value="@user.FindFirstValue("FirstName")" readonly="readonly" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Customer.LastName)
+                            <div>
+                                @*@user.FindFirstValue("LastName")*@
+                                <input type="text" name="FirstName" value="@user.FindFirstValue("LastName")" readonly="readonly" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Customer.Email)
+                            <div>
+                                @* @User.Identity.GetUserName()*@
+                                <input type="text" name="FirstName" value="@user.GetUserName()" readonly="readonly" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Customer.Phone)
+                            <div>
+                                @Html.EditorFor(model => model.Customer.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model=>model.Customer.Phone,"",new{@class="text-danger"})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <div class="panel-heading"><h4><strong>SHIPPING ADDRESS</strong></h4></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.Number)
+                            <div>
+                                @Html.EditorFor(model => model.Address.Number, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.Number, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.Street1)
+                            <div>
+                                @Html.EditorFor(model => model.Address.Street1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.Street1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.City)
+                            <div>
+                                @Html.EditorFor(model => model.Address.City, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.City, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.Street2)
+                            <div>
+                                @Html.EditorFor(model => model.Address.Street2, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.Street2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.State)
+                            <div>
+                                @Html.EditorFor(model => model.Address.State, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.State, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Country.CountryId)
+                            <div>
+                                @Html.DropDownListFor(model => model.Country.CountryId, @ViewBag.countryList as SelectList, "-- Select Your Country --", htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Country.CountryId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Address.PostCode)
+                            <div>
+                                @Html.EditorFor(model => model.Address.PostCode, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address.PostCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" style="margin-top: 20px;">
+                            @*@Html.ActionLink("Next","SaveAddress","",new{htmlAttributes = new{@class="btn btn-default"}})*@
+                            @*<a href="@Url.Action("ChoosePaymentMethod","Home")" class="btn  btn-block btn-info mx-0" style="margin-top: 20px;">next</a>*@
+                            <button class="btn btn-block btn-primary">NEXT</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+    
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4><strong>ORDER SUMMARY</strong></h4></div>
+            <div class="panel-body">
+                <table class="table">
+
+                    <tr>
+                        <th>SUBTOTAL</th>
+                        <td>$ @ViewBag.subTotal</td>
+                    </tr>
+                    <tr>
+                        <th><small class="text-muted">SHIPPING</small></th>
+                        <td>FREE</td>
+                    </tr>
+                    <tr>
+                        <th><small class="text-muted">GST</small></th>
+                        <td>$ @ViewBag.tax</td>
+                    </tr>
+                    <tr>
+                        <th>TOTAL</th>
+                        <td>$ @ViewBag.total</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+        @*<div class="panel panel-default" style="margin-top: 10px;">*@
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" class="btn-block collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="False" aria-controls="collapseOne" style="text-decoration: none;">
+                            @ViewBag.totalItems ITEM(S) IN ORDER
+                            <div class="pull-right"><i class="fa fa-plus"></i></div>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div class="row product-container">
+                            @if (Session["cart"] != null)
+                            {
+                                foreach (var book in (List<CartViewModel>)Session["cart"])
+                                {
+                                    <div class="col-md-10 col-md-offset-1 align-middle" style="margin-bottom: 8px; border: 1px solid #eee;">
+
+                                        <div class="thumbnail product-item col-md-3" style="height: 80px;margin-top: 5px;">
+
+                                            @if (book.Book.Photo != null)
+                                            {
+                                                @Html.GetThumbnail(book.Book.Photo, 160, 160)
+                                            }
+
+                                        </div>
+                                        <div class="caption col-md-9">
+                                            <h5><strong>@book.Book.BookName</strong></h5>
+                                            <p class="d-block">
+                                                Get it by @DateTime.Today.AddDays(3).ToLongDateString()
+                                            </p>
+                                            <p>
+                                                <div class="pull-left">
+                                                    QTY: @book.Quantity
+                                                </div>
+                                                <div class="pull-right">
+                                                    <strong>$@book.Book.Price</strong>
+                                                </div>
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+                    @*<button value="EDIT" class="btn btn-default btn-block" style="">Edit</button>*@
+                <div>
+                    <a href="@Url.Action("ViewCart","Home")" class="btn btn-block btn-primary" style="border-radius: 0;">EDIT</a>
+                </div>
+                    
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+
+

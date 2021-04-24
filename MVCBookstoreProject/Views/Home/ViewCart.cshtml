@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNet.Identity
+@using MVCBookstoreProject.Helpers
+@using MVCBookstoreProject.ViewModels
+@model IEnumerable<MVCBookstoreProject.Models.Customer>
+
+@{
+    ViewBag.Title = "ViewCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CheckOut</h2>
+@{
+    var num = 0;
+    if (Session["cart"] != null)
+    {
+        var list = (List<CartViewModel>)Session["cart"];
+        num = Convert.ToInt32(list.Count());
+    }
+    if (Session["cart"] == null)
+    {
+        <div class="alert alert-danger">
+            <strong>No book added to cart!</strong>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Cover</th>
+
+                    <th>
+                        Book
+                    </th>
+                    <th>Author</th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Subtotal
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in (List<CartViewModel>)Session["cart"])
+                {
+                    <tr>
+                        <td>@Html.GetThumbnail(book.Book.Photo, 80, 80)</td>
+                        <td>@book.Book.BookName</td>
+                        <td>@book.Book.Author</td>
+                        <td>@book.Book.Price</td>
+                        <td>@book.Quantity</td>
+                        <td>
+                            @{
+                                var subtotal = book.Book.Price * book.Quantity;
+                                @subtotal
+                            }
+
+                        </td>
+
+                        <td>
+                            <a href="@Url.Action("IncreaseQty", "Home", new {id = book.Book.BookId})">
+                                <i class="fa fa-plus-circle fa-2x" title="One More"></i>
+                            </a>
+                            <a href="@Url.Action("DecreaseQty", "Home", new {id = book.Book.BookId})">
+                                <i class="fa fa-minus-square fa-2x d-inline-block" style="margin-left: 10px;" title="Minus One"></i>
+                            </a>
+                            <a href="@Url.Action("RemoveFromCart", "Home", new {id = book.Book.BookId})">
+                                <i class="fa fa-times-circle fa-2x " style="margin-left: 10px;" title="Delete"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+    }
+
+}
+
+
+@{
+    var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+}
+@if (Model == null || Model.Count() == 0)
+{
+    <a href="@Url.Action("EnterAddress", "Home")" class="btn btn-success">CHECK OUT >></a>
+
+}
+else
+{
+    var hasCustomer = false;
+    foreach (var customer in Model)
+    {
+
+        if (customer.Email == user.GetUserName())
+        {
+            hasCustomer = true;
+            <a href="@Url.Action("ChoosePaymentMethod","Home", new{customerId = customer.CustomerId})" class="btn btn-success">CHECK OUT >></a>
+            break;
+        }
+
+    }
+    if (hasCustomer == false)
+    {
+        <a href="@Url.Action("EnterAddress", "Home")" class="btn btn-success">CHECK OUT >></a>
+    }
+
+}
+
+<a href="@Url.Action("Index","Home")" class="btn btn-info">CONTINUE SHOPPING <i class="fa fa-cart-plus"></i></a>
+
+
+

@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "OrderConfirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Confirmation</h2>
+<div class="container">
+    <ol class="breadcrumb col-md-12">
+        You have been ordered @ViewBag.num books successfully. To be arrived on @DateTime.Today.AddDays(3)!
+    </ol>
+</div>
+

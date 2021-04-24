@@ -1,0 +1,106 @@
+﻿@using MVCBookstoreProject.Helpers
+@model MVCBookstoreProject.Models.Book
+@{
+    ViewBag.Title = "BookDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    List<SelectListItem> QtyList = new List<SelectListItem>();
+    QtyList.Add(new SelectListItem() { Text = "1", Value = "1" });
+    QtyList.Add(new SelectListItem() { Text = "2", Value = "2" });
+    QtyList.Add(new SelectListItem() { Text = "3", Value = "3" });
+    QtyList.Add(new SelectListItem() { Text = "4", Value = "4" });
+    QtyList.Add(new SelectListItem() { Text = "5", Value = "5" });
+    QtyList.Add(new SelectListItem() { Text = "6", Value = "6" });
+    QtyList.Add(new SelectListItem() { Text = "7", Value = "7" });
+    QtyList.Add(new SelectListItem() { Text = "8", Value = "8" });
+    QtyList.Add(new SelectListItem() { Text = "9", Value = "9" });
+    QtyList.Add(new SelectListItem() { Text = "10", Value = "10" });
+
+}
+
+<h2>BookDetail</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.GetThumbnail(Model.Photo,200,200)
+
+        </div>
+        <div class="col-md-offset-1 col-md-5">
+            <dl class="dl-horizontal">
+                <dt style="text-align: left;">
+                    @Html.DisplayNameFor(model => model.BookName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BookName)
+                </dd>
+                <hr style="margin-top: 0;" />
+
+                <dt style="text-align: left;">
+                    @Html.DisplayNameFor(model => model.Author)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Author)
+                </dd>
+                <hr style="margin-top: 0;" />
+                <dt style="text-align: left;">
+                    @Html.DisplayNameFor(model => model.Category.CategoryName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Category.CategoryName)
+                </dd>
+                <hr style="margin-top: 0;" />
+
+                <dt style="text-align: left;">
+                    @Html.DisplayNameFor(model => model.Publisher.PublisherName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Publisher.PublisherName)
+                </dd>
+                <hr style="margin-top: 0;" />
+                <dt style="text-align: left;">
+                    @Html.DisplayNameFor(model => model.Language.LanguageName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Language.LanguageName)
+                </dd>
+
+            </dl>
+            <div style="margin-top: 15px; padding-top: 10px;" class="row">
+                <div class="col-md-12">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("AddMoreThanOne", "Home", new { id = Model.BookId }, FormMethod.Post))
+                        {
+
+                            @Html.DropDownList("OrderQty", QtyList, "-- Select the Quantity --", new { @style = "height:32px;width:180px;", @class = "col-md-6" })
+                            <input type="submit" value="ORDER" class="btn btn-primary pull-right" style="border-radius: 0;" />
+
+                        }
+                    }
+                    else
+                    {
+                        @Html.DropDownList("OrderQty", QtyList, "-- Select the Quantity --", new { @style = "height:32px;width:180px;", @class = "col-md-6" })
+                        <a href="~/Account/Login" class="pull-right btn btn-primary" style="border-radius: 0;">ORDER</a>
+                    }
+
+
+
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <div class="row">
+        @Html.ActionLink("Continue Shopping","Index","Home", new{@class="btn btn-primary"})
+    </div>
+</div>
+

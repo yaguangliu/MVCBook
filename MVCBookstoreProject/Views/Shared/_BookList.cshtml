@@ -1,0 +1,83 @@
+﻿@using System.Security.Policy
+@using System.Xml
+@using PagedList.Mvc
+@using MVCBookstoreProject.Helpers
+@model PagedList.IPagedList<MVCBookstoreProject.Models.Book>
+
+@{
+    ViewBag.Title = "Home Page";
+    List<SelectListItem> l1 = new List<SelectListItem>();
+    l1.Add(new SelectListItem() { Text = "Price: From Low to High", Value = "1" });
+    l1.Add(new SelectListItem() { Text = "Price: From High to Low", Value = "2" });
+    l1.Add(new SelectListItem() { Text = "Book Name: From A to Z", Value = "3" });
+    l1.Add(new SelectListItem() { Text = "Book Name: From Z to A", Value = "4" });
+}
+
+
+
+<div class="row" style="margin-top: 15px;">
+    
+        <div class="col-md-12" style="margin-bottom: 0; padding-bottom: 0;">
+
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                @Html.DropDownList("SortingList", l1, "-- Sorting Books --", new { htmlAttributes = new { @class = "form-control" },style="height:32px; width:260px;" })
+                <input type="submit" value="Sorting" class="btn btn-primary" style="border-radius: 0;"/>
+            }
+        </div>
+    
+    <div class="col-md-12" style="margin-top: 0;">
+        <div class="page-header" style="margin-top: 0;">
+            <h2>Our Books <small>trends books</small></h2>
+
+        </div>
+    </div>
+</div>
+<div class="row product-container">
+
+    @foreach (var book in Model)
+    {
+        <div class="col-md-3 col-sm-3 col-xs-6" style="margin-bottom: 8px">
+
+            <div class="thumbnail product-item" style="height: 300px">
+
+                @if (book.Photo != null)
+                {
+                    <a href="@Url.Action("BookDetail", "Home", new{id = book.BookId})">
+                        @Html.GetThumbnail(book.Photo, 160, 160)
+                    </a>
+                }
+                <div class="caption">
+                    <a href="@Url.Action("Index","Home", new{id = book.BookId})"><h5>@Html.StriptHtml(@book.BookName, 22)</h5></a>
+                    <p>
+                        <span>@book.Category.CategoryName</span>
+                        <span class="pull-right"><strong>$ @book.Price</strong></span>
+                    </p>
+                    <p>
+                        Available
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="@Url.Action("AddToCart", "Home", new {id = @book.BookId})" class="pull-right"><i class="fa fa-shopping-cart btn btn-sm btn-primary"></i></a>
+                        }
+                        else
+                        {
+                            <a href="~/Account/Login" class="pull-right"><i class="fa fa-shopping-cart btn btn-sm btn-primary"></i></a>
+                        }
+                    </p>
+                    <div class="product-item-badge">New</div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(
+    Model,
+    page => Url.Action("Index",
+        new { page, currentFilter = ViewBag.CurrentFilter }),
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "grid" }))
+
+
+
