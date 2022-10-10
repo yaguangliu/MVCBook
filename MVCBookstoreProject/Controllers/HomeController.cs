@@ -19,9 +19,13 @@ namespace MVCBookstoreProject.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        // testing mirror git
         public ActionResult Index(string searchString, string currentFilter, int? page)
         {
             //string sorting = SortingList;
+            /*this is a test for testing the mirror between github and cloud source repostories
+            mirror action will involve pull or not? or egress traffic
+            */
 
 
             if (searchString != null)
