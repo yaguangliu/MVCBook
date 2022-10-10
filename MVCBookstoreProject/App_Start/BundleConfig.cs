@@ -18,6 +18,7 @@ namespace MVCBookstoreProject
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             // a new comment added by Yaguang
+            // another changes to the repo
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
